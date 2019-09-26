@@ -1,16 +1,16 @@
-	TRIANGULO: EQU 1 ;Teste de coment;
-SECTION TEXT
+	TRIANGULO: EQU 0 ;Teste de coment;
+	SECTION TEXT
 		INPUT		B
 		INPUT		H
 		LOAD		B
 		MULT		H
 		IF TRIANGULO
 		DIV		DOIS ;aaaa
-		STORE		R
+		store		R
 		OUTPUT	R
 		STOP
 SECTION DATA ;Teste de comentario
-	B:		SPACE
+	B:		space
 	H:		SPACE
 	R:		SPACE
 	DOIS:	CONST		2

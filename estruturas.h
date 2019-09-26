@@ -24,14 +24,24 @@ struct directives{
 	int directive_value;				//Valor da diretiva - para const
 };
 
+//Estrutura que armazena símbolos e dados relevantes
+struct symbols{
+	std::string symbol_name;			//Nome do símbolo
+	std::string symbol_label;		//Rótulo do símbolo, se hover						
+	int symbol_address;					//Endereço do símbolo
+	int symbol_line;						//Linha do símbolo
+	std::string symbol_type;		//Tipo de símbolo
+};
+
+
 //Vetor de Instruções
 std::vector<instructions> instructions_vector_build(){
 	unsigned i;
-	
+
 	std::string instructions_name[] = {"ADD", "SUB", "MULT", "DIV", "JMP", "JMPN", "JMPP", "JMPZ", "COPY", "LOAD", "STORE", "INPUT", "OUTPUT", "STOP"};
 	int instructions_opcode[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 	int instructions_args_number[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0};
-	
+
 	std::vector<instructions> instructions_vector;
 	instructions temp;
 	for(i = 0; i < 14; i++){
@@ -40,24 +50,22 @@ std::vector<instructions> instructions_vector_build(){
 		temp.arg_number = instructions_args_number[i];
 		instructions_vector.push_back(temp);
 	};
-	
+
 	return instructions_vector;
 }
 
 //Vetor de Diretivas
 std::vector<directives> directives_vector_build(){
 	unsigned i;
-	
+
 	std::string directive_names[] = {"SECTION", "SPACE", "CONST", "EQU", "IF"};
-	
+
 	std::vector<directives> directives_vector;
 	directives temp;
 	for(i = 0; i < 5; i++){
 			temp.directive_name = directive_names[i];
 			directives_vector.push_back(temp);
 	};
-	
+
 	return directives_vector;
 }
-
-
