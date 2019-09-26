@@ -49,5 +49,5 @@ std::vector<std::string> file_reader(std::string input_file_name){
 			printf("Falha ao abrir arquivo. Verifique se digitou o nome correto e se o arquivo está no mesmo diretório do programa.");
 		}
 
-		return word;
+		return word; aaa
 }
