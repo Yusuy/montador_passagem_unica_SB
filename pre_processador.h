@@ -82,7 +82,7 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 	std::vector<directives> directives_list = directives_vector_build();
 
 	for(i = 0; i < code_vector.size(); i++){
-		if((code_vector[i].back() == ':') and (code_vector[i+1] == "EQU")){
+		if((code_vector[i].back() == ':') and (code_vector[i+1] == "EQU") and (i < code_vector.size()-2)) {
 			code_vector[i].resize(code_vector[i].size() -1);
 			aux.symbol_label = code_vector[i];
 			i++;
@@ -96,7 +96,7 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 
 		else if (code_vector[i] == "IF"){
 			for (j = 0; j < directive_bank.size(); j++){
-				if(directive_bank[j].symbol_label == code_vector[i+1]){
+				if((directive_bank[j].symbol_label == code_vector[i+1]) and (i < code_vector.size()-2)){
 					value = directive_bank[j].symbol_address;
 				};
 			};
@@ -105,7 +105,7 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 			i++;
 			i++;
 			if (value == 0){
-				while( (code_vector[i] != "\n") and (i<code_vector.size()) ) {
+				while( (code_vector[i] != "\n") and (i<code_vector.size()-2) ) {
 					i++;
 				};
 			};
