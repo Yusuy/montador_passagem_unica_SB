@@ -1,6 +1,6 @@
 //Declarações das Funções de pré-processamento
-std::vector<std::string> file_reader(std::string input_file);
-std::vector<std::string> directive_placer(std::vector<std::string> code_vector);
+std::vector<std::string> file_reader(std::string input_file_name);
+std::vector<std::string> directive_placer(std::vector<std::string>);
 
 //Função que gera um vetor do código ignorando os comentário e passando tudo para caixa alta a partir de um arquivo de entrada
 std::vector<std::string> file_reader(std::string input_file_name){
@@ -34,7 +34,7 @@ std::vector<std::string> file_reader(std::string input_file_name){
 				};
 			};
 		};
-
+std::cout << c;
 		//Rotina para salvar o código em um vetor de strings ignorando espaços e quebras de linha
 		k = 0;
 		for(i = 0; i < word_c.size(); i++){
@@ -73,64 +73,54 @@ std::vector<std::string> file_reader(std::string input_file_name){
 std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 
 	int value;
-	int i, j;
+	int i=0, j;
 	std::string label;
 	std::vector<std::string> output_code;
 
 	symbols aux;
 	std::vector<symbols> directive_bank;
-	std::vector<directives> directives_list = directives_vector_build();
 
-	for(i = 0; i < code_vector.size(); i++){
-		if((code_vector[i].back() == ':') and (code_vector[i+1] == "EQU") and (i < code_vector.size()-2)) {
+	while(i < code_vector.size()){
+		if((code_vector[i].back() == ':') and (code_vector[i+1] == "EQU")) {
 			code_vector[i].resize(code_vector[i].size() -1);
 			aux.symbol_label = code_vector[i];
 			i++;
+
 			aux.symbol_name = code_vector[i];
 			i++;
+
 			aux.symbol_address = stoi(code_vector[i]);
+			aux.symbol_line = 0;
+			aux.symbol_type = "DIRETIVA";
+
 			directive_bank.push_back(aux);
-			i++;
-			output_code.push_back(code_vector[i]);
+			i+=2;
 		}
 
 		else if (code_vector[i] == "IF"){
 			for (j = 0; j < directive_bank.size(); j++){
-				if((directive_bank[j].symbol_label == code_vector[i+1]) and (i < code_vector.size()-2)){
+				if(directive_bank[j].symbol_label == code_vector[i+1]){
 					value = directive_bank[j].symbol_address;
 				};
 			};
-
-			i++;
-			i++;
-			i++;
+			i+=3;
 			if (value == 0){
-				while( (code_vector[i] != "\n") and (i<code_vector.size()-2) ) {
+				while((code_vector[i] != "\n") and (i<code_vector.size())) {
 					i++;
 				};
+				i++;
+			}
+			else{
+				output_code.push_back(code_vector[i]);
+				i++;
 			};
-			output_code.push_back(code_vector[i]);
 		}
 
 		else{
 			output_code.push_back(code_vector[i]);
+			i++;
 		};
 	};
 
 	return output_code;
-}
-
-std::string pre_process(){
-
-	std::string file_name;
-	printf("Digite o nome do arquivo a ser lido: ");
-	std::cin >> file_name;
-	std::vector<std::string> file = file_reader(file_name.append(".asm"));				//Extensão do arquivo a ser lido é adicionado ao nome do arquivo
-	printf("\n");
-
-	std::vector<std::string> file_pre_processed = directive_placer(file);
-
-	for(unsigned i; i<file_pre_processed.size();i++)
-		std::cout << file_pre_processed[i] << ' ';
-
 }
