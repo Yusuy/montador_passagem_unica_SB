@@ -20,7 +20,11 @@
 		stop
 		STOP
 SECTION DATA ;Teste de comentario
+;gggggggg
+if xxx
 	B:		space
 	H:		SPACE
 	R:		SPACE
+	if zzz
+	ram: space
 	DOIS:	CONST		2

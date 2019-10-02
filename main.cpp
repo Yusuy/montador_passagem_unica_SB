@@ -16,6 +16,9 @@ int main (int argc, char **argv){
 
 	std::vector<std::string> file_pre_processed = directive_placer(file);
 
+	//Contador de linhas
+	program_counter(file_pre_processed);
+
 	//Imprime codigo original
 	/*for(unsigned i=0; i<file.size();i++)
 		std::cout << file[i] << ' ';*/

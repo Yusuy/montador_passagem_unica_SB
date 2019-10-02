@@ -1,6 +1,7 @@
 //Declarações das Funções de pré-processamento
 std::vector<std::string> file_reader(std::string input_file_name);
 std::vector<std::string> directive_placer(std::vector<std::string>);
+void program_counter(std::vector<std::string> treated_code);
 
 //Função que gera um vetor do código ignorando os comentário e passando tudo para caixa alta a partir de um arquivo de entrada
 std::vector<std::string> file_reader(std::string input_file_name){
@@ -123,4 +124,20 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 	};
 
 	return output_code;
+}
+
+//Função para contar quantidade de linhas
+void program_counter(std::vector<std::string> treated_code){
+
+	std::vector<std::string> aux;
+	unsigned i = 0;
+	unsigned j = 0;
+	while(i <treated_code.size()-1){
+		if (treated_code[i] == "\n") {
+			j++;
+		};
+		aux.push_back(treated_code[i]);
+		i++;
+	};
+	printf("\nLinhas: %d\n", j);
 }
