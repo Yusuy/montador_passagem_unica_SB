@@ -1,7 +1,10 @@
 //Declarações das Funções de pré-processamento
 std::vector<std::string> file_reader(std::string input_file_name);
 std::vector<std::string> directive_placer(std::vector<std::string>);
-void program_counter(std::vector<std::string> treated_code);
+std::vector<std::string> program_organizer(std::vector<std::string> treated_code);
+void program_counter(std::vector<std::string> code);
+std::vector<std::string> section_organizer(std::vector<std::string> program);
+std::vector<std::string> spacer(std::vector<std::string> organized_program);
 
 //Função que gera um vetor do código ignorando os comentário e passando tudo para caixa alta a partir de um arquivo de entrada
 std::vector<std::string> file_reader(std::string input_file_name){
@@ -28,20 +31,19 @@ std::vector<std::string> file_reader(std::string input_file_name){
 					word_c.push_back(' ');
 					word_c.push_back('\n');
 					word_c.push_back(' ');
-
 				}
 				else{
 					word_c.push_back(toupper(c));
 				};
 			};
 		};
-std::cout << c;
+
 		//Rotina para salvar o código em um vetor de strings ignorando espaços e quebras de linha
 		k = 0;
 		for(i = 0; i < word_c.size(); i++){
 			j = 0;
-			if((isalnum(word_c[i])) or (word_c[i] == ':')){
-				while(((isalnum(word_c[i]))  or (word_c[i] == ':')) and (i < word_c.size())){
+			if((word_c[i] != ' ') && (word_c[i] != '\t') && (word_c[i] != '\n')){
+				while((word_c[i] != ' ') && (word_c[i] != '\t') && (word_c[i] != '\n') && (i < word_c.size())){
 					word_aux[j] = word_c[i];
 					i++;
 					j++;
@@ -55,7 +57,6 @@ std::cout << c;
 				word.push_back(word_aux);
 			};
 
-			//Zerando vetor de símbolo
 			for(j=0;j<sizeof(word_aux);j++){
 				word_aux[j] = '\0';
 			};
@@ -64,8 +65,9 @@ std::cout << c;
 	}
 
 		else{
-			printf("Falha ao abrir arquivo. Verifique se digitou o nome correto e se o arquivo está no mesmo diretório do programa.");
-		}
+			printf("\nFalha ao abrir arquivo. Verifique se digitou o nome correto e se o arquivo está no mesmo diretório do programa.\n");
+			word.push_back("");
+		};
 
 		return word;
 }
@@ -126,18 +128,121 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 	return output_code;
 }
 
-//Função para contar quantidade de linhas
-void program_counter(std::vector<std::string> treated_code){
+//Função para arrumar e organizar linhas
+std::vector<std::string> program_organizer(std::vector<std::string> treated_code){
 
 	std::vector<std::string> aux;
 	unsigned i = 0;
-	unsigned j = 0;
-	while(i <treated_code.size()-1){
-		if (treated_code[i] == "\n") {
+	while(i < treated_code.size()-1){
+		if ((treated_code[i] == "\n") && (treated_code[i+1] == "\n") && (i < treated_code.size())){
+			i++;
+		}
+		else{
+			aux.push_back(treated_code[i]);
+			i++;
+		};
+	};
+	return aux;
+}
+
+//Contador de linhas do código
+void program_counter(std::vector<std::string> code){
+	unsigned i;
+	unsigned j=1;
+	for(i=0;i<code.size();i++){
+		if(code[i]=="\n"){
 			j++;
 		};
-		aux.push_back(treated_code[i]);
-		i++;
 	};
 	printf("\nLinhas: %d\n", j);
+}
+
+//Organizador de segmentos
+std::vector<std::string> section_organizer(std::vector<std::string> program){
+
+	unsigned flag = 1;
+	unsigned another_flag = 1;
+	std::vector<std::string> aux;
+	unsigned i, j;
+
+	i=0;
+	while (i < program.size()) {
+		if ((program[i] == "SECTION") && (program[i+1] == "TEXT") && (i+1 < program.size())) {
+
+			flag = 0;
+			i+=3;
+
+			while (i+2 < program.size()) {
+				aux.push_back(program[i]);
+				i++;
+				if ((program[i+1] == "SECTION") && (program[i+2] == "DATA")) {
+					another_flag = 0;
+					break;
+				};
+			};
+			if (another_flag == 1) {
+				aux.push_back(program[i]);
+				aux.push_back(program[i+1]);
+			};
+		};
+
+			i++;
+	};
+
+	i=0;
+	another_flag = 1;
+	while (i < program.size()) {
+		if ((program[i] == "SECTION") && (program[i+1] == "DATA") && (i+1 < program.size())) {
+
+			i+=2;
+
+			while (i+2 < program.size()) {
+				aux.push_back(program[i]);
+				i++;
+				if ((program[i+1] == "SECTION") && (program[i+2] == "TEXT")) {
+					another_flag = 0;
+					break;
+				};
+			};
+			if (another_flag == 1) {
+				aux.push_back(program[i]);
+				aux.push_back(program[i+1]);
+			};
+		};
+
+			i++;
+	};
+
+	if(flag == 1){
+		printf("ERRO: Não há segmento de texto declarado.\n");
+	};
+
+	return aux;
+}
+
+//Ultimo tratamento para que o código de pre processamento seja gerado - substitui valores hexadecial, retira vírgula de COPY e + de SPACE
+std::vector<std::string> spacer(std::vector<std::string> organized_program){
+
+	unsigned i, j;
+	std::vector<std::string> aux;
+	std::string token;
+	std::string token_aux;
+
+
+	for (i = 0; i < organized_program.size(); i++) {
+		if (organized_program[i] == "COPY"){
+			i++;
+			token = organized_program[i];
+			std::stringstream stream(token);
+			while (getline(stream, token_aux, ',')) {
+				aux.push_back(token_aux);
+			};
+		}
+		else if (organized_program[i] == "SPACE") {
+			/* code */
+		}
+		else{
+			aux.push_back(organized_program[i]);
+		};
+	};
 }
