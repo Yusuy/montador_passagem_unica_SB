@@ -223,26 +223,35 @@ std::vector<std::string> section_organizer(std::vector<std::string> program){
 //Ultimo tratamento para que o código de pre processamento seja gerado - substitui valores hexadecial, retira vírgula de COPY e + de SPACE
 std::vector<std::string> spacer(std::vector<std::string> organized_program){
 
-	unsigned i, j;
+	unsigned i;
 	std::vector<std::string> aux;
 	std::string token;
 	std::string token_aux;
+	char k_ant;
 
 
 	for (i = 0; i < organized_program.size(); i++) {
 		if (organized_program[i] == "COPY"){
+			aux.push_back(organized_program[i]);
 			i++;
 			token = organized_program[i];
-			std::stringstream stream(token);
-			while (getline(stream, token_aux, ',')) {
-				aux.push_back(token_aux);
+
+			for(char& c : token){
+				if (c != ',') {
+					token_aux += c;
+				}
+				else{
+					aux.push_back(token_aux);
+					token_aux = "";
+				};
 			};
-		}
-		else if (organized_program[i] == "SPACE") {
-			/* code */
+			aux.push_back(token_aux);
+
 		}
 		else{
 			aux.push_back(organized_program[i]);
 		};
 	};
+
+	return aux;
 }

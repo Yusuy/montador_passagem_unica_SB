@@ -6,7 +6,7 @@ zzz: equ 0
 SECTION DATA ;Teste de comentario
 ;gggggggg
 if xxx
-	B:		space
+	B:		space 
 	H:		SPACE
 	R:		SPACE
 	if zzz
@@ -19,7 +19,7 @@ if xxx
 		input xablau
 		if xxx
 		LOAD		B
-		copy a,b
+		copy a,b,c
 		MULT		H
 		IF TRIANGULO
 		DIV		DOIS ;aaaa

@@ -32,8 +32,8 @@ int main (int argc, char **argv){
 		std::cout << file_organized[i] << ' ';*/
 
 	//Imprime codigo com quebras de linha corrigidas
-	/*for(unsigned i=0; i<program.size();i++)
-		std::cout << program[i] << ' ';*/
+	//for(unsigned i=0; i<program.size();i++)
+	//	std::cout << program[i] << ' ';
 
 	//Imprime codigo com quebras de linha corrigidas
 	for(unsigned i=0; i<spaced_program.size();i++)
