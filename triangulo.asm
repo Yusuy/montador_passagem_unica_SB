@@ -6,7 +6,7 @@ zzz: equ 0
 SECTION DATA ;Teste de comentario
 ;gggggggg
 if xxx
-	B:		space 
+	B:		space
 	H:		SPACE
 	R:		SPACE
 	if zzz
