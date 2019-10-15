@@ -319,9 +319,9 @@ void pre_process(){
 	//	std::cout << program[i] << ' ';
 
 	//Imprime codigo com quebras de linha corrigidas
-	for(unsigned i=0; i<spaced_program.size();i++)
-		std::cout << spaced_program[i] << ' ';
+	/*for(unsigned i=0; i<spaced_program.size();i++)
+		std::cout << spaced_program[i] << ' ';*/
 
 	//Contador de linhas
-	program_counter(program);
+	//program_counter(program);
 }
