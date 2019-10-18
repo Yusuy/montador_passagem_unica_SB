@@ -67,7 +67,7 @@ std::vector<std::string> file_reader(std::string input_file_name){
 	}
 
 		else{
-			printf("\nFalha ao abrir arquivo. Verifique se digitou o nome correto e se o arquivo está no mesmo diretório do programa.\n");
+			printf("\nArquivo nao encontrado. Verifique se digitou o nome correto e se o arquivo está no mesmo diretório do programa.\n");
 			word.push_back("");
 		};
 
@@ -291,7 +291,7 @@ void file_generator(std::vector<std::string> code, std::string file_name){
 //Função de pre_processamento
 void pre_process(){
 	std::string file_name;
-	printf("Digite o nome do arquivo a ser lido: ");
+	printf("Digite o nome do código fonte a ser lido (sem extensao .bin): ");
 	std::cin >> file_name;
 	std::vector<std::string> file = file_reader(file_name);				//Extensão do arquivo a ser lido é adicionado ao nome do arquivo
 	printf("\n");
