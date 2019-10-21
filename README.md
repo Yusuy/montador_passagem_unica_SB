@@ -1,8 +1,8 @@
-//Montador de Passagem Única
-//CiC - Software Básico
+Montador de Passagem Única
+CiC - Software Básico
 
-//Guilherme ...
-//Victor Gabriel Rodrigues de Almeida 14/0052399
+Guilherme ...
+Victor Gabriel Rodrigues de Almeida 14/0052399
 
 MONTADOR
 Na mesma pasta encontram-se todos os códigos do trabalho
