@@ -4,6 +4,7 @@ std::vector<std::string> directive_placer(std::vector<std::string>);
 std::vector<std::string> program_organizer(std::vector<std::string> treated_code);
 void program_counter(std::vector<std::string> code);
 std::vector<std::string> section_organizer(std::vector<std::string> program);
+std::vector<std::string> spacer(std::vector<std::string> organized_program);
 void file_generator(std::vector<std::string> code, std::string file_name);
 void pre_process(std::string file_name);
 
@@ -241,6 +242,41 @@ std::vector<std::string> section_organizer(std::vector<std::string> program){
 	return aux;
 }
 
+//Ultimo tratamento para que o código de pre processamento seja gerado - retira vírgula de COPY e + de SPACE
+std::vector<std::string> spacer(std::vector<std::string> organized_program){
+
+	unsigned i;
+	std::vector<std::string> aux;
+	std::string token;
+	std::string token_aux;
+	char k_ant;
+
+	for (i = 0; i < organized_program.size(); i++){
+		if (organized_program[i] == "COPY"){
+			aux.push_back(organized_program[i]);
+			i++;
+			token = organized_program[i];
+
+			for(char& c : token){
+				if (c != ','){
+					token_aux += c;
+				}
+				else{
+					aux.push_back(token_aux);
+					token_aux = "";
+				};
+			};
+
+			aux.push_back(token_aux);
+		}
+		else{
+			aux.push_back(organized_program[i]);
+		};
+	};
+
+	return aux;
+}
+
 //Função que salva arquivo pre processado
 void file_generator(std::vector<std::string> code, std::string file_name){
 
@@ -261,7 +297,8 @@ void pre_process(std::string file_name){
 	std::vector<std::string> file_pre_processed = directive_placer(file);
 	std::vector<std::string> file_organized = program_organizer(file_pre_processed);
 	std::vector<std::string> program = section_organizer(file_organized);
-	file_generator(program, file_name);
+	std::vector<std::string> spaced_program = spacer(program);
+	file_generator(spaced_program, file_name);
 
 	//Imprime codigo original
 	/*for(unsigned i=0; i<file.size();i++)
@@ -278,6 +315,11 @@ void pre_process(std::string file_name){
 	//Imprime codigo com quebras de linha corrigidas
 	/*for(unsigned i=0; i<program.size();i++)
 		std::cout << program[i] << ' ';*/
+
+
+	//Imprime codigo com tudo corrigido
+	/*for(unsigned i=0; i<spaced_program.size();i++)
+			std::cout << spaced_program[i] << ' ';*/
 
 	//Contador de linhas
 	//program_counter(program);
