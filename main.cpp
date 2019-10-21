@@ -6,9 +6,12 @@
 #include <algorithm>
 #include "estruturas.h"
 #include "pre_processador.h"
-//#include "montador.h"
+#include "montador.h"
 
 int main (int argc, char **argv){
-	pre_process();
-	//fazerMontagem(arqProcessed, arqMontado);
+	std::string file_name;
+	printf("Digite o nome do código fonte a ser lido (sem extensao .asm): ");
+	std::cin >> file_name;
+	pre_process(file_name);
+	fazerMontagem(file_name);
 }

@@ -5,7 +5,7 @@ std::vector<std::string> program_organizer(std::vector<std::string> treated_code
 void program_counter(std::vector<std::string> code);
 std::vector<std::string> section_organizer(std::vector<std::string> program);
 void file_generator(std::vector<std::string> code, std::string file_name);
-void pre_process();
+void pre_process(std::string file_name);
 
 //Função que gera um vetor do código ignorando os comentário e passando tudo para caixa alta a partir de um arquivo de entrada
 std::vector<std::string> file_reader(std::string input_file_name){
@@ -253,10 +253,8 @@ void file_generator(std::vector<std::string> code, std::string file_name){
 }
 
 //Função de pre_processamento
-void pre_process(){
-	std::string file_name;
-	printf("Digite o nome do código fonte a ser lido (sem extensao .asm): ");
-	std::cin >> file_name;
+void pre_process(std::string file_name){
+
 	std::vector<std::string> file = file_reader(file_name);				//Extensão do arquivo a ser lido é adicionado ao nome do arquivo
 	printf("\n");
 

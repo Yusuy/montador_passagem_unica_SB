@@ -33,6 +33,18 @@ struct symbols{
 	std::string symbol_type;		//Tipo de símbolo
 };
 
+//Teste struct para tabela de simbolos
+struct symbols_Table{
+	std::string symbolName;		// Nome dado para o rotulo
+	int symbolAddress;			// Endereco do rotulo
+	int isCONST;				// Valor que diz se eh um rotulo definido como CONST ou nao. 0 para nao CONST, 1 para CONST e 2 para CONST igual a zero
+	int isSPACE;				// Valor que diz quanto espaco esta reservado. Se for igual a zero, significa que nao foi uma definicao usando SPACE
+
+	symbols_Table (){};
+	symbols_Table (std::string name): symbolName(name){};
+};
+
+
 
 //Vetor de Instruções
 std::vector<instructions> instructions_vector_build(){
