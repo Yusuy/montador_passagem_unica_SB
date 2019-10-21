@@ -4,7 +4,6 @@ std::vector<std::string> directive_placer(std::vector<std::string>);
 std::vector<std::string> program_organizer(std::vector<std::string> treated_code);
 void program_counter(std::vector<std::string> code);
 std::vector<std::string> section_organizer(std::vector<std::string> program);
-std::vector<std::string> spacer(std::vector<std::string> organized_program);
 void file_generator(std::vector<std::string> code, std::string file_name);
 void pre_process();
 
@@ -179,10 +178,11 @@ void program_counter(std::vector<std::string> code){
 std::vector<std::string> section_organizer(std::vector<std::string> program){
 
 	unsigned flag = 1;
-	unsigned another_flag = 1;
+	unsigned another_flag;
 	std::vector<std::string> aux;
 	unsigned i, j;
 
+	another_flag = 1;
 	i=0;
 	while (i < program.size()) {
 		if ((program[i] == "SECTION") && (program[i+1] == "TEXT") && (i+1 < program.size())) {
@@ -202,13 +202,13 @@ std::vector<std::string> section_organizer(std::vector<std::string> program){
 			if (another_flag == 1) {
 				aux.push_back(program[i]);
 				aux.push_back(program[i+1]);
-				aux.push_back("\n");
 			};
 		};
 
 			i++;
 	};
 
+	aux.push_back("\n");
 	i=0;
 	another_flag = 1;
 	while (i < program.size()) {
@@ -228,7 +228,6 @@ std::vector<std::string> section_organizer(std::vector<std::string> program){
 			if (another_flag == 1) {
 				aux.push_back(program[i]);
 				aux.push_back(program[i+1]);
-				aux.push_back("\n");
 			};
 		};
 
@@ -237,41 +236,6 @@ std::vector<std::string> section_organizer(std::vector<std::string> program){
 
 	if(flag == 1){
 		printf("\nERRO: Não há segmento de texto declarado.\n");
-	};
-
-	return aux;
-}
-
-//Ultimo tratamento para que o código de pre processamento seja gerado - substitui valores hexadecial, retira vírgula de COPY e + de SPACE
-std::vector<std::string> spacer(std::vector<std::string> organized_program){
-
-	unsigned i;
-	std::vector<std::string> aux;
-	std::string token;
-	std::string token_aux;
-	char k_ant;
-
-	for (i = 0; i < organized_program.size(); i++){
-		if (organized_program[i] == "COPY"){
-			aux.push_back(organized_program[i]);
-			i++;
-			token = organized_program[i];
-
-			for(char& c : token){
-				if (c != ','){
-					token_aux += c;
-				}
-				else{
-					aux.push_back(token_aux);
-					token_aux = "";
-				};
-			};
-
-			aux.push_back(token_aux);
-		}
-		else{
-			aux.push_back(organized_program[i]);
-		};
 	};
 
 	return aux;
@@ -291,7 +255,7 @@ void file_generator(std::vector<std::string> code, std::string file_name){
 //Função de pre_processamento
 void pre_process(){
 	std::string file_name;
-	printf("Digite o nome do código fonte a ser lido (sem extensao .bin): ");
+	printf("Digite o nome do código fonte a ser lido (sem extensao .asm): ");
 	std::cin >> file_name;
 	std::vector<std::string> file = file_reader(file_name);				//Extensão do arquivo a ser lido é adicionado ao nome do arquivo
 	printf("\n");
@@ -299,8 +263,7 @@ void pre_process(){
 	std::vector<std::string> file_pre_processed = directive_placer(file);
 	std::vector<std::string> file_organized = program_organizer(file_pre_processed);
 	std::vector<std::string> program = section_organizer(file_organized);
-	std::vector<std::string> spaced_program = spacer(program);
-	file_generator(spaced_program, file_name);
+	file_generator(program, file_name);
 
 	//Imprime codigo original
 	/*for(unsigned i=0; i<file.size();i++)
@@ -315,12 +278,8 @@ void pre_process(){
 		std::cout << file_organized[i] << ' ';*/
 
 	//Imprime codigo com quebras de linha corrigidas
-	//for(unsigned i=0; i<program.size();i++)
-	//	std::cout << program[i] << ' ';
-
-	//Imprime codigo com quebras de linha corrigidas
-	/*for(unsigned i=0; i<spaced_program.size();i++)
-		std::cout << spaced_program[i] << ' ';*/
+	for(unsigned i=0; i<program.size();i++)
+		std::cout << program[i] << ' ';
 
 	//Contador de linhas
 	//program_counter(program);
