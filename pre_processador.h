@@ -278,8 +278,8 @@ void pre_process(){
 		std::cout << file_organized[i] << ' ';*/
 
 	//Imprime codigo com quebras de linha corrigidas
-	for(unsigned i=0; i<program.size();i++)
-		std::cout << program[i] << ' ';
+	/*for(unsigned i=0; i<program.size();i++)
+		std::cout << program[i] << ' ';*/
 
 	//Contador de linhas
 	//program_counter(program);
