@@ -354,14 +354,12 @@ std::string instrucaoCOPY(std::string line,std::string &instName, std::string co
 
 	}
 
-	std::cout << "final cpoy : cod: " << codigoObj << std::endl;
 
 }
 
 std::string instrucaoUmArgumento(std::string line,std::string &instName, std::string codigoObj, int lineNumber,std::vector<symbols_Table> symbolTable){
 
 
-	std::cout << "comeco codigoObj: " << codigoObj << std::endl;
 
 	int i;
 	if(instName == "ADD"){
@@ -436,7 +434,6 @@ std::string instrucaoUmArgumento(std::string line,std::string &instName, std::st
 		std::string nextArg;
 		streamLine >> nextArg;
 
-		std::cout << "line: " << line << "nextArg :" << nextArg << std::endl;
 
 		if (nextArg.empty()){ //Verifica se há argumentos para a instrução
 			std::cout << "Erro sintático: Instrução " << instName << " deve ter um argumento. Linha: " << lineNumber << std::endl;
@@ -502,7 +499,7 @@ std::string instrucaoUmArgumento(std::string line,std::string &instName, std::st
 				// }
 			}
 
-			std::string numericalArg;
+			std::string numericalArg = " ";
 			numericalArg = nextArg.substr(searchSum+1); //Armazena valor após sinal de soma
 
 			// Verifica se o numeroVetor eh um numero valido. Tem que ser um numero e nao pode ser negativo
@@ -545,7 +542,6 @@ std::string instrucaoUmArgumento(std::string line,std::string &instName, std::st
 
 				convert << insereSth;
 				convert >> convertido;
-            	std::cout << "instrucao - com soma - defined: "  << std::endl;
 
 
 				codigoObj = codigoObj + " " + convertido;
@@ -560,7 +556,6 @@ std::string instrucaoUmArgumento(std::string line,std::string &instName, std::st
 
 				convert << value;
 				convert >> convertido;
-				std::cout << "instrucao ccom soma- nao defined: "  << std::endl;
 
 				builder = separator + firstPartArg + "+" + convertido + separator;
 				codigoObj = codigoObj + " " + builder;
@@ -635,7 +630,6 @@ std::string instrucaoUmArgumento(std::string line,std::string &instName, std::st
 			if(isDEFINED == 0){
 				std::string separator = ("-");
 				std::string builder;
-				std::cout << "sem soma - nao defined - codigoObj: " << codigoObj << std::endl;
 
 				builder = separator + nextArg + separator;
 				codigoObj = codigoObj + builder;
@@ -645,7 +639,6 @@ std::string instrucaoUmArgumento(std::string line,std::string &instName, std::st
 	}
 
 
-	std::cout << "fim codigoObj: " << codigoObj << std::endl;
 	return codigoObj;
 
 }
@@ -653,10 +646,10 @@ std::string instrucaoUmArgumento(std::string line,std::string &instName, std::st
 std::string arrumaObj(std::string codigoObj, std::vector<symbols_Table>	&symbolTable){
 
 
-	std::string firstPartCod;
-  	std::string secondPartCod;
-  	std::string desired;
-  	std::string medium;
+	std::string firstPartCod = " ";
+  	std::string secondPartCod = " ";
+  	std::string desired = " ";
+  	std::string medium = " ";
   	std::size_t secondSeparatorPos;
 
 	for(int i=0;i<=symbolTable.size();i++){
@@ -694,7 +687,6 @@ std::string arrumaObj(std::string codigoObj, std::vector<symbols_Table>	&symbolT
 		}
 
 	}
-	std::cout << "---->>>>>>><<<<<<--------cod: " << codigoObj << std::endl;
 	return codigoObj;
 
 
@@ -703,7 +695,7 @@ std::string arrumaObj(std::string codigoObj, std::vector<symbols_Table>	&symbolT
 int verificaConst(std::string &label,std::stringstream &streamLine, std::vector<symbols_Table>	&symbolTable, std::string codigoObj, int lineNumber){
 	//Verifica se a diretiva de constante é válida e atualiza valor de endereço
 
-	std::string thirdArg;
+	std::string thirdArg = " ";
 	int valAuxiliar,i;
 	char *c;
 	int error;
@@ -857,12 +849,9 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 		lineNumber = lineNumber + 1; //Contagem de linha
 		okLabel = 0;
 
-
-
 		label.clear();
 		std::stringstream streamLine(line);
 
-		std::cout << "aline: " << line << std::endl;
 
 		streamLine >> label; 	 //Pega palavra da linha
 
@@ -891,7 +880,6 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 			// streamLine >> word;
 
 
-			std::cout << "achou rotulo" << std::endl;
 			streamLine >> secondArg;
 
 			label.pop_back(); //Retira dois pontos do rótulo
@@ -902,14 +890,12 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 			}
 
 			else{
-				std::cout << "entrou else: não  ta vazio" << std::endl;
 				//Verifica se rótulo é igual a nome de instrução
 				if(label == "ADD" || label == "SUB" || label == "MULT" || label == "DIV" || label == "JMP" || label == "JMPN" || label == "JMPP" || label == "JMPZ" || label == "COPY" || label == "LOAD" || label == "STORE" || label == "INPUT" || label == "OUTPUT" || label == "STOP"){
 					errorLabel = 1;
 					std::cout << "Erro semântico: Rótulo com nome de instrução. Linha: " << lineNumber << std::endl;
 				}
 				else{
-					std::cout << "1 if n" << std::endl;
 				}
 
 				//Verifica se rótulo é igual a nome de diretiva
@@ -918,9 +904,7 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 					std::cout << "Erro semântico: Rótulo com nome de diretiva. Linha: " << lineNumber << std::endl;
 				}
 				else{
-					std::cout << "2 if n" << std::endl;
 				}
-				std::cout << label <<" " << label.length() << std::endl;
 				//Verifica se há Token inválido no rótulo
 	            for (i = 0; i < label.length(); i++){
 	               if((label.at(i) > '9' || label.at(i) < '0') && (label.at(i) != '_') && (label.at(i) > 'Z' || label.at(i) < 'A')){
@@ -928,17 +912,14 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 	                	std::cout << "Erro léxico: Token inválido. Linha: " << lineNumber << std::endl;
 	               }
 	               else{
-	               	std::cout << "3 if for n" << std::endl;
 	               }
 	            }
-	            std::cout << "4 if " << std::endl;
 	            //Verifica se rótulo é iniciado com número
 	            if(label.front() <= '9' && label.front() >= '0' ){
 	                errorLabel = 1;
 	                std::cout << "Erro léxico: Rótulo iniciado com número. Linha: " << lineNumber << std::endl;
 	            }
 
-	            std::cout << "4 if n - labelNumber:" << labelNumber << std::endl;
 	            //Verifica se há outro rótulo com mesmo nome
 	            for (j = 0; j <= labelNumber; ++j){
 	                if (label == symbolTable[j].symbolName){
@@ -946,11 +927,9 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 	                    std::cout << "Erro semântico: Rótulo repetido. Linha: " << lineNumber << std::endl;
 	                }
 	                else{
-	                	std::cout << "5 if for n" << std::endl;
 	                }
 
 	            }
-	            std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaerrorLabel: " << errorLabel << std::endl;
 
     	      	if(errorLabel == 0){ // Se não deu nenhum erro até agr
        	   						 //Adiciona simbolo na tabela
@@ -963,16 +942,15 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
           			std::stringstream convert;
           			std::string convertido;
           			std::size_t alreadySeem = codigoObj.find(label);
-          			std::cout << "alreadySeem" << std::endl;
 
 
 					if(alreadySeem != std::string::npos){
 
 						std::string traco = ("-");
-  						std::string firstPartCod;
-  						std::string secondPartCod;
-  						std::string desired;
-  						std::string medium;
+  						std::string firstPartCod = " ";
+  						std::string secondPartCod = " ";
+  						std::string desired = " ";
+  						std::string medium = " ";
   						std::size_t secondSeparatorPos;
 
 	    				firstPartCod = codigoObj.substr(0,alreadySeem-1);
@@ -1019,7 +997,6 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
   					}
 
      	     		labelNumber = labelNumber + 1; //Incrementa numero de Labels adicionados.
-     	     		std::cout << "aaaaaaaadhgashdashdgasdasdasgdyashdkasdgyuasdbjkasbdhgyu " << std::endl;
      	     		codigoObj = arrumaObj(codigoObj,symbolTable);
 
    		       	}
@@ -1086,7 +1063,6 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
         	   			if(section != 2){
         	   				errorLabel = 1;
         	   				std::cout << "Erro semântico. Diretiva CONST deve estar na SECTION DATA. Linha:  " << lineNumber << std::endl;
-        	   				std::cout << "section : " << section << std::endl;
         	   			}
          		   	}
 
@@ -1161,7 +1137,7 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 				}
 				else{
 					if(section == 2){
-						std::cout << "aaaaErro léxico. Diretiva inválida. Linha:  " << lineNumber << std::endl;
+						std::cout << "Erro léxico. Diretiva inválida. Linha:  " << lineNumber << std::endl;
 					}
 				}
 			}
@@ -1218,8 +1194,6 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
         			}
         			else{
 
-            			std::cout << "instrução: 3 if" << std::endl;
-            			std::cout << codigoObj.length() << std::endl;
         				codigoObj = instrucaoUmArgumento(line, label, codigoObj, lineNumber, symbolTable);
         				lineObjNumber = lineObjNumber + 2;
         			}
@@ -1231,10 +1205,6 @@ void passagemUnica(std::ifstream &file, std::vector<symbols_Table> &symbolTable,
 
 			}
 
-		}
-
-		if(label == "COPY"){
-			std::cout<< "final final copy: codigoObj: " << codigoObj << std::endl;
 		}
 	}
 
@@ -1255,16 +1225,15 @@ void fazerMontagem(std::string input_file_name){
     Aux.isSPACE = 0;  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<-------------Verificar isso
     symbolTable.push_back(Aux);
 
-	symbolTable[0].symbolName = "jim";
+	symbolTable[0].symbolName = " ";
 
-	for(i=0;i<symbolTable.size();i++){
-		std::cout << "\nRotulo: " << symbolTable[i].symbolName << "; Valor: " << symbolTable[i].symbolAddress << "; Valor da def Const: " << std::endl;
-	}
 
 	std::ifstream input_file (input_file_name.append(".pre"));
 
 	passagemUnica(input_file,symbolTable, codigoObj);
 
-	std::cout << "fim : "<< codigoObj << std::endl;
+	std::ofstream newFile(input_file_name.append(".obj"));
+
+    newFile << codigoObj;
 
 }
