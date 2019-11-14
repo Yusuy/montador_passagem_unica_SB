@@ -21,7 +21,7 @@ if xxx
 		LOAD		B
 		copy a,b,c
 		MULT		H
-		IF TRIANGULO
+		IF TRIAnGULO
 		DIV		dois ;aaaa
 		store		R
 		if aba

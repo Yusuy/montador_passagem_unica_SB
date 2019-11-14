@@ -167,9 +167,16 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 			for (j = 0; j < directive_bank.size(); j++){
 				if(directive_bank[j].symbol_label == code_vector[i]){
 					value = directive_bank[j].symbol_address;
+					flag = 1;
 				};
 			};
-			output_code.push_back(std::to_string(value));
+			if (flag == 1) {
+				output_code.push_back(std::to_string(value));
+			}
+			else{
+				output_code.push_back(code_vector[i]);
+				std::cout << "\nERRO SEMANTICO: DIRETIVA " << code_vector[i] << " NAO DECLARADA NA LINHA " << line << " DO CODIGO FONTE\n";
+			}
 			i++;
 		}
 
