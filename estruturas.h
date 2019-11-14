@@ -1,6 +1,8 @@
 struct labels;
 struct instructions;
 struct directives;
+struct build_structure;
+struct symbols;
 
 //Estrutura que armazena dados dos rótulos
 struct labels {
@@ -27,7 +29,7 @@ struct directives{
 //Estrutura que armazena símbolos e dados relevantes
 struct symbols{
 	std::string symbol_name;			//Nome do símbolo
-	std::string symbol_label;		//Rótulo do símbolo, se hover						
+	std::string symbol_label;		//Rótulo do símbolo, se hover
 	int symbol_address;					//Endereço do símbolo
 	int symbol_line;						//Linha do símbolo
 	std::string symbol_type;		//Tipo de símbolo
@@ -44,7 +46,14 @@ struct symbols_Table{
 	symbols_Table (std::string name): symbolName(name){};
 };
 
-
+//Estrutura que armazena símbolos e dados relevantes
+struct build_structure{
+	std::string name;			//Nome do símbolo
+	int opcode; 	//Opcode
+	int line;					//Endereço do símbolo
+	int address;						//Linha do símbolo
+	std::string section;		//Tipo de símbolo
+};
 
 //Vetor de Instruções
 std::vector<instructions> instructions_vector_build(){
