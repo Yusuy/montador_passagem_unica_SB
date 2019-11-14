@@ -7,6 +7,7 @@
 #include "estruturas.h"
 #include "pre_processador.h"
 #include "montador.h"
+#include "montador_ligador.h"
 
 int main (int argc, char **argv){
 	std::string file_name;

@@ -22,7 +22,7 @@ if xxx
 		copy a,b,c
 		MULT		H
 		IF TRIANGULO
-		DIV		DOIS ;aaaa
+		DIV		dois ;aaaa
 		store		R
 		if aba
 		OUTPUT	R

@@ -1,5 +1,6 @@
 //Declarações das Funções de pré-processamento
 std::vector<std::string> file_reader(std::string input_file_name);
+int is_declared_symbol_label(std::vector<symbols> symbols_table, std::string symbols_aux);
 std::vector<std::string> directive_placer(std::vector<std::string>);
 std::vector<std::string> program_organizer(std::vector<std::string> treated_code);
 void program_counter(std::vector<std::string> code);
@@ -89,6 +90,18 @@ std::vector<std::string> file_reader(std::string input_file_name){
 		return word;
 }
 
+int is_declared_symbol_label(std::vector<symbols> symbols_table, std::string symbols_aux){
+	//std::cout << "Entrei\n";
+	int flag = 0;
+	for (unsigned i = 0; i < symbols_table.size(); i++) {
+		if (symbols_table[i].symbol_label == symbols_aux) {
+			flag = 1;
+		}
+	};
+
+	return flag;
+}
+
 //Função que substitui diretivas
 std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 
@@ -105,6 +118,7 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 		if((code_vector[i].back() == ':') and (code_vector[i+1] == "EQU")) {
 			code_vector[i].resize(code_vector[i].size() -1);
 			aux.symbol_label = code_vector[i];
+			//std::cout << "Carreguei: " << code_vector[i] << "\n";
 			i++;
 
 			aux.symbol_name = code_vector[i];
@@ -147,6 +161,16 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 				std::cout << "\nERRO SEMANTICO: DIRETIVA " << auxi << " NAO DECLARADA NA LINHA " << line << " DO CODIGO FONTE\n";
 				line +=1;
 			};
+		}
+
+		else if (is_declared_symbol_label(directive_bank, code_vector[i]) == 1) {
+			for (j = 0; j < directive_bank.size(); j++){
+				if(directive_bank[j].symbol_label == code_vector[i]){
+					value = directive_bank[j].symbol_address;
+				};
+			};
+			output_code.push_back(std::to_string(value));
+			i++;
 		}
 
 		else{
