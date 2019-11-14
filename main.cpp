@@ -13,5 +13,5 @@ int main (int argc, char **argv){
 	printf("Digite o nome do código fonte a ser lido (sem extensao .asm): ");
 	std::cin >> file_name;
 	pre_process(file_name);
-	fazerMontagem(file_name);
+	//fazerMontagem(file_name);
 }
