@@ -18,6 +18,7 @@ std::vector<std::string> file_reader(std::string input_file_name){
 	char word_aux[50];
 	unsigned i, j, k;
 
+	word.push_back(" \n ");
 	//Rotina para salvar o código em um vetor de caracteres ignorando os comentátios
 	if(input_file.is_open()){
 		while (input_file.get(c)){
@@ -41,8 +42,22 @@ std::vector<std::string> file_reader(std::string input_file_name){
 		};
 
 		//Rotina para salvar o código em um vetor de strings ignorando espaços e quebras de linha
+		i = 0;
+		j = 0;
 		k = 0;
-		for(i = 0; i < word_c.size(); i++){
+
+		while((word_c[i] != ' ') && (word_c[i] != '\t') && (word_c[i] != '\n') && (i < word_c.size())){
+				word_aux[j] = word_c[i];
+				//std::cout << word_c[i] << "\n";
+				i++;
+				j++;
+			};
+
+		word_aux[i] = '\0';
+		word.push_back(word_aux);
+		//std::cout << word_aux << "\n";
+
+		for(i = i; i < word_c.size(); i++){
 			j = 0;
 			if((word_c[i] != ' ') && (word_c[i] != '\t') && (word_c[i] != '\n')){
 				while((word_c[i] != ' ') && (word_c[i] != '\t') && (word_c[i] != '\n') && (i < word_c.size())){
@@ -50,8 +65,8 @@ std::vector<std::string> file_reader(std::string input_file_name){
 					i++;
 					j++;
 				}
-
 				word.push_back(word_aux);
+				//std::cout << word_aux << "\n";
 			}
 
 			else if (word_c[i] == '\n'){
@@ -274,6 +289,7 @@ std::vector<std::string> spacer(std::vector<std::string> organized_program){
 		};
 	};
 
+	aux.push_back("\n");
 	return aux;
 }
 
