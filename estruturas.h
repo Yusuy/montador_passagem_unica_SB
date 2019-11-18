@@ -49,7 +49,7 @@ struct symbols_Table{
 //Estrutura que armazena símbolos e dados relevantes
 struct build_structure{
 	std::string name;			//Nome do símbolo
-	int opcode; 	//Opcode
+	std::string opcode; 	//Opcode
 	int line;					//Endereço do símbolo
 	int address;						//Linha do símbolo
 	std::string section;		//Tipo de símbolo
