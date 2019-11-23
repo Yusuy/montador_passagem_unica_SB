@@ -1,8 +1,11 @@
 SECTION TEXT 
  INPUT B 
+ COPY A , B 
+ COPY G , H + 1 
+ COPY 1 , X 
  INPUT H 
  LOAD B 
- COPY A B C 
+ COPY A , B + 0 
  MULT H 
  DIV DOIS 
  STORE R 

@@ -14,12 +14,15 @@ if xxx
 	DOIS:	CONST		2
 	SECTION text
 		INPUT		B
+		copy a,b
+		copy g,h+TRIANGULO
+		copy triangulo,x
 		INPUT		H
 		if yyy
 		input xablau
 		if xxx
 		LOAD		B
-		copy a,b,c
+		copy a,b+zzz
 		MULT		H
 		IF TRIAnGULO
 		DIV		dois ;aaaa

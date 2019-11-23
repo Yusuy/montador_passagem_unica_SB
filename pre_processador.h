@@ -8,6 +8,9 @@ std::vector<std::string> section_organizer(std::vector<std::string> program);
 std::vector<std::string> spacer(std::vector<std::string> organized_program);
 void file_generator(std::vector<std::string> code, std::string file_name);
 void pre_process(std::string file_name);
+std::vector<symbols> directive_vector(std::vector<std::string> code_vector);
+std::vector<std::string> copy_separator (std::vector<std::string> organized_program);
+std::vector<std::string> equ_placer (std::vector<std::string> organized_program, std::vector<symbols> directives);
 
 //Função que gera um vetor do código ignorando os comentário e passando tudo para caixa alta a partir de um arquivo de entrada
 std::vector<std::string> file_reader(std::string input_file_name){
@@ -192,6 +195,26 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 	return output_code;
 }
 
+//Função que retorna vetor de diretivas
+std::vector<symbols> directive_vector(std::vector<std::string> code_vector){
+
+	symbols aux;
+	std::vector<symbols> directive_bank;
+
+	for(unsigned i = 0; i<code_vector.size(); i++){
+		if((code_vector[i].back() == ':') && (code_vector[i+1] == "EQU")){
+			std::string token = code_vector[i];
+			token.resize(token.size()-1);
+			aux.symbol_label = token;
+			i+=2;
+			aux.symbol_name = code_vector[i];
+			//std::cout << "Salvei: " << aux.symbol_label << " com valor " << aux.symbol_name << "\n";
+			directive_bank.push_back(aux);
+		}
+	}
+	return directive_bank;
+}
+
 //Função para arrumar e organizar linhas
 std::vector<std::string> program_organizer(std::vector<std::string> treated_code){
 
@@ -288,31 +311,23 @@ std::vector<std::string> section_organizer(std::vector<std::string> program){
 	return aux;
 }
 
-//Ultimo tratamento para que o código de pre processamento seja gerado - retira vírgula de COPY e + de SPACE
+//Tratamento para que o código de pre processamento seja gerado - retira vírgula de COPY
 std::vector<std::string> spacer(std::vector<std::string> organized_program){
 
 	unsigned i;
 	std::vector<std::string> aux;
 	std::string token;
 	std::string token_aux;
-	char k_ant;
 
 	for (i = 0; i < organized_program.size(); i++){
 		if (organized_program[i] == "COPY"){
 			aux.push_back(organized_program[i]);
 			i++;
 			token = organized_program[i];
-
-			for(char& c : token){
-				if (c != ','){
-					token_aux += c;
-				}
-				else{
-					aux.push_back(token_aux);
-					token_aux = "";
-				};
-			};
-
+			token_aux = token.substr(token.find(',')+1, token.size());
+			token.resize(token.find(','));
+			aux.push_back(token);
+			aux.push_back(",");
 			aux.push_back(token_aux);
 		}
 		else{
@@ -322,6 +337,58 @@ std::vector<std::string> spacer(std::vector<std::string> organized_program){
 
 	aux.push_back("\n");
 	return aux;
+}
+
+//Função que separa os +
+std::vector<std::string> copy_separator (std::vector<std::string> organized_program){
+
+	std::vector<std::string> program;
+
+	for(unsigned i =0; i<organized_program.size(); i++){
+		if(organized_program[i].find('+') != std::string::npos){
+			std::string token = organized_program[i];
+			//std::cout << "Cheguei\n";
+			token.resize(token.find('+'));
+			program.push_back(token);
+			program.push_back("+");
+			std::string aux = organized_program[i].substr(organized_program[i].find('+')+1, organized_program[i].size());
+			program.push_back(aux);
+		}
+		else{
+			program.push_back(organized_program[i]);
+		};
+	};
+
+	return program;
+}
+
+//função que substitui TODOS equs
+std::vector<std::string> equ_placer (std::vector<std::string> organized_program, std::vector<symbols> directives){
+
+	std::vector<std::string> program;
+	std::string token, token_d;
+	int flag = 0;
+	for(unsigned i =0; i < organized_program.size(); i++){
+		for(unsigned j = 0; j < directives.size(); j++){
+			if(organized_program[i] == directives[j].symbol_label){
+				token_d = directives[j].symbol_name;
+				flag = 1;
+			}
+			else{
+				token = organized_program[i];
+			};
+		};
+
+		if(flag == 1){
+			program.push_back(token_d);
+			flag = 0;
+		}
+		else{
+			program.push_back(token);
+		};
+	};
+
+	return program;
 }
 
 //Função que salva arquivo pre processado
@@ -344,8 +411,12 @@ void pre_process(std::string file_name){
 	std::vector<std::string> file_pre_processed = directive_placer(file);
 	std::vector<std::string> file_organized = program_organizer(file_pre_processed);
 	std::vector<std::string> program = section_organizer(file_organized);
+	std::vector<symbols> directives = directive_vector(file);
 	std::vector<std::string> spaced_program = spacer(program);
-	file_generator(spaced_program, file_name);
+	std::vector<std::string> plus_separeted = copy_separator(spaced_program);
+	std::vector<std::string> last_one_program = equ_placer(plus_separeted, directives);
+
+	file_generator(last_one_program, file_name);
 
 	//Imprime codigo original
 	/*for(unsigned i=0; i<file.size();i++)
