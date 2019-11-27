@@ -8,6 +8,7 @@ std::vector<std::string> section_organizer(std::vector<std::string> program);
 std::vector<std::string> spacer(std::vector<std::string> organized_program);
 void file_generator(std::vector<std::string> code, std::string file_name);
 void pre_process(std::string file_name);
+std::vector<std::string> hex_handler (std::vector<std::string> organized_program);
 std::vector<symbols> directive_vector(std::vector<std::string> code_vector);
 std::vector<std::string> copy_separator (std::vector<std::string> organized_program);
 std::vector<std::string> equ_placer (std::vector<std::string> organized_program, std::vector<symbols> directives);
@@ -127,7 +128,7 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 			aux.symbol_name = code_vector[i];
 			i++;
 
-			aux.symbol_address = stoi(code_vector[i]);
+			aux.symbol_address = std::stoi(code_vector[i]);
 			aux.symbol_line = 0;
 			aux.symbol_type = "DIRETIVA";
 
@@ -161,7 +162,7 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 				flag = 0;
 			}
 			else{
-				std::cout << "\nERRO SEMANTICO: DIRETIVA " << auxi << " NAO DECLARADA NA LINHA " << line << " DO CODIGO FONTE\n";
+				//std::cout << "\nERRO SEMANTICO: DIRETIVA " << auxi << " NAO DECLARADA NA LINHA " << line << " DO CODIGO FONTE\n";
 				line +=1;
 			};
 		}
@@ -178,7 +179,7 @@ std::vector<std::string> directive_placer(std::vector<std::string> code_vector){
 			}
 			else{
 				output_code.push_back(code_vector[i]);
-				std::cout << "\nERRO SEMANTICO: DIRETIVA " << code_vector[i] << " NAO DECLARADA NA LINHA " << line << " DO CODIGO FONTE\n";
+				//std::cout << "\nERRO SEMANTICO: DIRETIVA " << code_vector[i] << " NAO DECLARADA NA LINHA " << line << " DO CODIGO FONTE\n";
 			}
 			i++;
 		}
@@ -200,6 +201,7 @@ std::vector<symbols> directive_vector(std::vector<std::string> code_vector){
 
 	symbols aux;
 	std::vector<symbols> directive_bank;
+	int flag = 0;
 
 	for(unsigned i = 0; i<code_vector.size(); i++){
 		if((code_vector[i].back() == ':') && (code_vector[i+1] == "EQU")){
@@ -210,7 +212,14 @@ std::vector<symbols> directive_vector(std::vector<std::string> code_vector){
 			aux.symbol_name = code_vector[i];
 			//std::cout << "Salvei: " << aux.symbol_label << " com valor " << aux.symbol_name << "\n";
 			directive_bank.push_back(aux);
+			flag = 1;
 		}
+	}
+
+	if(flag == 0){
+		aux.symbol_label = "0";
+		aux.symbol_name = "0";
+		directive_bank.push_back(aux);
 	}
 	return directive_bank;
 }
@@ -368,18 +377,22 @@ std::vector<std::string> equ_placer (std::vector<std::string> organized_program,
 	std::vector<std::string> program;
 	std::string token, token_d;
 	int flag = 0;
-	for(unsigned i =0; i < organized_program.size(); i++){
+	for(unsigned i = 0; i < organized_program.size(); i++){
+		//std::cout <<	organized_program[i] << " ";
 		for(unsigned j = 0; j < directives.size(); j++){
 			if(organized_program[i] == directives[j].symbol_label){
+				//std::cout << "Cheguei\n";
 				token_d = directives[j].symbol_name;
 				flag = 1;
 			}
 			else{
 				token = organized_program[i];
+				//std::cout << token;
 			};
 		};
 
 		if(flag == 1){
+			//std::cout << token_d;
 			program.push_back(token_d);
 			flag = 0;
 		}
@@ -389,6 +402,37 @@ std::vector<std::string> equ_placer (std::vector<std::string> organized_program,
 	};
 
 	return program;
+}
+
+std::vector<std::string> hex_handler (std::vector<std::string> organized_program){
+	std::vector<std::string> output;
+	std::string aux;
+	int dec;
+	for (unsigned i = 0; i < organized_program.size(); i++) {
+		if(organized_program[i] == "CONST"){
+			output.push_back(organized_program[i]);
+			i++;
+			if(organized_program[i].find('X') != std::string::npos){
+				aux = organized_program[i].substr(organized_program[i].find('X')+1, organized_program[i].size());
+				dec = std::stoul(aux, nullptr, 16);
+				output.push_back(std::to_string(dec));
+			}
+			else if (organized_program[i].find('H') != std::string::npos) {
+				aux = organized_program[i];
+				aux.resize(aux.size()-1);
+				dec = std::stoul(aux, nullptr, 16);
+				output.push_back(std::to_string(dec));
+			}
+			else{
+				output.push_back(organized_program[i]);
+			}
+		}
+		else{
+			output.push_back(organized_program[i]);
+		}
+	}
+
+	return output;
 }
 
 //Função que salva arquivo pre processado
@@ -415,8 +459,9 @@ void pre_process(std::string file_name){
 	std::vector<std::string> spaced_program = spacer(program);
 	std::vector<std::string> plus_separeted = copy_separator(spaced_program);
 	std::vector<std::string> last_one_program = equ_placer(plus_separeted, directives);
+	std::vector<std::string> now_its_last_one = hex_handler(last_one_program);
 
-	file_generator(last_one_program, file_name);
+	file_generator(now_its_last_one, file_name);
 
 	//Imprime codigo original
 	/*for(unsigned i=0; i<file.size();i++)
@@ -434,10 +479,19 @@ void pre_process(std::string file_name){
 	/*for(unsigned i=0; i<program.size();i++)
 		std::cout << program[i] << ' ';*/
 
+	/*for(unsigned i=0; i<plus_separeted.size();i++)
+		std::cout << plus_separeted[i] << ' ';*/
+
+	/*for(unsigned i=0; i<last_one_program.size();i++)
+		std::cout << last_one_program[i] << ' ';
+
 
 	//Imprime codigo com tudo corrigido
 	/*for(unsigned i=0; i<spaced_program.size();i++)
 			std::cout << spaced_program[i] << ' ';*/
+
+	/*for(unsigned i=0; i<now_its_last_one.size();i++)
+			std::cout << now_its_last_one[i] << ' ';*/
 
 	//Contador de linhas
 	//program_counter(program);
